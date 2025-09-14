@@ -1,0 +1,197 @@
+﻿@model Alquinet_Entidad.ClasesPropiedad.Casa
++
+@{
+    ViewBag.Title = "Registro Propiedad";
+}
+
+<form id="formularioInmobiliario" class="container mt-4" enctype="multipart/form-data" method="post">
+    @Html.HiddenFor(m => m.Tipo, new { @Value = "Departamento" })
+
+    <div id="opcionesDepartamento">
+        <div class="mb-3">
+            <label for="ubicacion" class="form-label">Ubicación:</label>
+            <div id="map" class="mb-3" style="height: 400px; width: 100%;"></div>
+        </div>
+        @Html.HiddenFor(m => m.Direccion.Latitud)
+        @Html.HiddenFor(m => m.Direccion.Longitud)
+
+        <div class="mb-3">
+            <label for="codPos" class="form-label">Código Postal:</label>
+            @Html.TextBoxFor(m => m.Direccion.Cod_pos, new { @class = "form-control" })
+        </div>
+
+        <div class="mb-3">
+            <label for="calle" class="form-label">Calle:</label>
+            @Html.TextBoxFor(m => m.Direccion.Calle, new { @class = "form-control" })
+        </div>
+
+        <div class="mb-3">
+            <label for="barrio" class="form-label">Barrio:</label>
+            @Html.TextBoxFor(m => m.Direccion.Barrio, new { @class = "form-control" })
+        </div>
+
+        <div class="mb-3">
+            <label for="zona" class="form-label">Zona:</label>
+            @Html.TextBoxFor(m => m.Direccion.Zona, new { @class = "form-control" })
+        </div>
+
+        <div class="mb-3">
+            <label for="area" class="form-label">Área (m²):</label>
+            @Html.TextBoxFor(m => m.Area, new { @class = "form-control", @type = "number", @min = "0" })
+        </div>
+
+        <div class="mb-3">
+            <label for="planta" class="form-label">Planta:</label>
+            @Html.TextBoxFor(m => m.Pisos, new { @class = "form-control" })
+        </div>
+
+        <div class="mb-3">
+            <label>Características adicionales:</label><br>
+            @foreach (var caracteristica in new List<string> { "piscina", "parrilla", "garaje", "agua", "luz", "telefono", "gas" })
+            {
+                <div class="form-check form-check-inline">
+                    @Html.CheckBox("CaracteristicasAdicionales", new { @class = "form-check-input", @value = caracteristica })
+                    <label for="@caracteristica" class="form-check-label">@caracteristica</label>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label for="tituloAnuncio" class="form-label">Título del Anuncio:</label>
+        @Html.TextBoxFor(m => m.Titulo, new { @class = "form-control" })
+    </div>
+
+    <div class="mb-3">
+        <label for="precio" class="form-label">Precio:</label>
+        @Html.TextBoxFor(m => m.PrecioTexto, new { @class = "form-control", @type = "number", @min = "0", @step = "1000" }) Bs
+    </div>
+
+    <div class="mb-3">
+        <label for="imagenes" class="form-label">Subir Imágenes:</label>
+        <input type="file" id="Fotos" name="Fotos" class="form-control" accept="image/*" multiple="multiple" />
+    </div>
+
+    <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción:</label>
+        @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", @rows = "4" })
+    </div>
+
+    <button type="button" class="btn btn-primary" onclick="ConfirmarRegistro()">Registrar</button>
+</form>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const map = L.map('map').setView([-17.393695, -66.156425], 13);
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        let marker;
+
+        map.on('click', function (e) {
+            const latLng = e.latlng;
+            if (marker) {
+                marker.setLatLng(latLng);
+            } else {
+                marker = L.marker(latLng).addTo(map);
+            }
+            $('#Direccion_Latitud').val(latLng.lat.toFixed(6));
+            $('#Direccion_Longitud').val(latLng.lng.toFixed(6));
+        });
+    });
+
+    function ConfirmarRegistro() {
+        const formData = new FormData();
+        const archivosImagen = document.getElementById('Fotos').files;
+
+        for (let i = 0; i < archivosImagen.length; i++) {
+            formData.append('archivosImagen', archivosImagen[i]);
+        }
+        debugger;
+        const objDireccion = {
+            Latitud: $('#Direccion_Latitud').val(),
+            Longitud: $('#Direccion_Longitud').val(),
+            Cod_pos: $('#Direccion_Cod_pos').val(),
+            Calle: $('#Direccion_Calle').val(),
+            Barrio: $('#Direccion_Barrio').val(),
+            Zona: $('#Direccion_Zona').val()
+        };
+
+        const objPropiedad = {
+            Area: $('#Area').val(),
+            Descripcion: $('#Descripcion').val(),
+            Titulo: $('#Titulo').val(),
+            PrecioTexto: $('#PrecioTexto').val(),
+            NombreEdificio: $('#NombreEdificio').val(),
+            Planta: $('#Planta').val(),
+            Cod_direccion: 0, // Será asignado en el servidor
+        };
+
+        formData.append('objDireccion', JSON.stringify(objDireccion));
+        formData.append('objPropiedad', JSON.stringify(objPropiedad));
+
+        $.ajax({
+    url: `http://127.0.0.1:5000/BonitaPropiedad?precio=${precio}&area=${area}&tipo=${tipo}&zona=${zona}`,
+    type: 'GET',
+    success: function(response) {
+        const probability = response.probabilidad;
+
+        Swal.fire({
+            title: 'Probabilidad de Alquiler',
+            text: `Tu propiedad tiene un ${probability}% de probabilidad de ser alquilada. ¿Deseas asumir los riesgos?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, asumir riesgos',
+            cancelButtonText: 'No, cambiar precio'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Confirmar Alquiler',
+                    text: `Sabiendo que la probabilidad de que se alquile su departamento es ${probability}%, ¿desea proceder con el alquiler?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí, proceder',
+                    cancelButtonText: 'No, cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Proceed with form submission
+                        $.ajax({
+                            url: '@Url.Action("Guardar", "Propietario")',
+                            type: 'POST',
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(response) {
+                                if (response.operacion_exitosa) {
+                                    Swal.fire('Éxito', 'Propiedad registrada exitosamente', 'success')
+                                        .then(() => window.location.reload());
+                                } else {
+                                    Swal.fire('Error', response.mensaje, 'error');
+                                }
+                            },
+                            error: function() {
+                                Swal.fire('Error', 'Error en la solicitud', 'error');
+                            }
+                        });
+                    } else {
+                        $('#PrecioTexto').focus();
+                    }
+                });
+            } else {
+                $('#PrecioTexto').focus();
+            }
+        });
+    },
+    error: function() {
+        Swal.fire('Error', 'No se pudo obtener la probabilidad de alquiler', 'error');
+    }
+});
+
+    }
+</script>
+

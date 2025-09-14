@@ -1,0 +1,113 @@
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment variables
+.env
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/
+out/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET specific
+bin/
+obj/
+*.dll
+*.pdb
+*.exe
+
+# Publish outputs
+*.publishsettings
+*.pubxml
+*.pubxml.user
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+project.fragment.lock.json
+
+# IIS
+*.vspscc
+*.vssscc
+*.config
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# Rider
+.idea/
+*.sln.iml
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+*.log
+
+# Database
+*.mdf
+*.ldf
+
+# Azure
+*.azurePubxml
+
+# Third-party libraries and dependencies
+# Bootstrap
+**/Content/bootstrap*
+**/Scripts/bootstrap*
+
+# jQuery
+**/Scripts/jquery*
+
+# FontAwesome
+**/Content/fontawesome*
+**/Content/brands*
+**/Content/regular*
+**/Content/solid*
+**/Content/svg-with-js*
+**/Content/v4-shims*
+**/Content/all*
+**/Scripts/fontawesome/
+**/webfonts/
+
+# DataTables
+**/Content/DataTables/
+**/Scripts/DataTables/
+
+# SweetAlert
+**/Content/sweetalert*
+**/Scripts/sweetalert*
+
+# Other JavaScript libraries
+**/Scripts/modernizr*
+**/Scripts/loadingoverlay/
+**/Scripts/leafletjs*

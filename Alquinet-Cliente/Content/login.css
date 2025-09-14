@@ -1,0 +1,80 @@
+* {
+    box-sizing: border-box;
+    font-family: sans-serif;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: url(https://img.freepik.com/vector-gratis/fondo-lineas-dinamicas-estilo-papel_23-2149011157.jpg) no-repeat center center fixed;
+    background-size: cover;
+}
+
+  .login {
+    width: 320px;
+    height: 450px;
+    border: 1px solid #CCC;
+    background: url(https://i.gifer.com/5VlL.gif) center center no-repeat;
+    background-size: cover;
+    margin: 100px auto;
+    border-radius: 20px;
+  }
+  .login .form {
+    width: 100%;
+    height: 100%;
+    padding: 15px 25px;
+  }
+  .login .form .user-img {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1px;
+  }
+  .login .form .user-img img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+  }
+  .login .form h1 {
+    color: #FFF;
+    text-align: center;
+    font-weight: normal;
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .login .form input {
+    width: 100%;
+    height: 40px;
+    margin-top: 20px;
+    background: rgba(255,255,255,.5);
+    border: 1px solid rgba(255,255,255,.1);
+    padding: 0 15px;
+    color: #FFF;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  .login .form input:focus {
+    border: 1px solid rgba(255,255,255,.8);
+    outline: none;
+  }
+  ::-webkit-input-placeholder {
+      color: #DDD;
+  }
+  .login .form input.submit {
+    background: rgba(255,255,255,.9);
+    color: #444;
+    font-size: 15px;
+    margin-top: 40px;
+    font-weight: bold;
+  }
+  .login .form a {
+    display: block;
+    text-align: center;
+    color: #FFF;
+    margin-top: 20px; 
+    text-decoration: none;
+}
+
+.login .form a:hover {
+    text-decoration: underline;
+}

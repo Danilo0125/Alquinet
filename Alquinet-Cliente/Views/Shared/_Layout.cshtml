@@ -1,0 +1,145 @@
+﻿@using System.Security.Claims;
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - ALQUINET</title>
+    @*<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />*@
+</head>
+<body class="m-0 border-0 bd-example m-0 border-0">
+    <nav class="navbar navbar-expand-lg" style="background-color: rgb(141, 139, 139);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="@Url.Action("Index", "Home")">
+                <div style="display: flex; align-items: center;">
+                    <img src="~/images/ALQUINET.png" alt="Logo" style="width: auto; height: 70px;">
+                    <img src="~/images/ALQUINET4.png" alt="Logo-nombre" style="width: auto; height: 70px; margin-left: 10px;">
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Navegación de palanca">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="@Url.Action("Index","Propiedad")" style="color: white; text-shadow: 0 0 5px white;" onmouseover="this.style.textShadow='0 0 10px white';" onmouseout="this.style.textShadow='0 0 5px white';" onclick="loadContent('@Url.Action("BuscarPropiedades", "Propiedades")')">
+                            Buscar Propiedades
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white; text-shadow: 0 0 5px white;" onmouseover="this.style.textShadow='0 0 10px white';" onmouseout="this.style.textShadow='0 0 5px white';">
+                            Registrar Propiedades
+                        </a>
+                        <ul class="dropdown-menu" style="background-color: rgb(26, 22, 22);">
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("Departamento","Propietario")" style="color: white; text-shadow: 0 0 5px white;" onmouseover="this.style.textShadow='0 0 10px white';" onmouseout="this.style.textShadow='0 0 5px white';" onclick="loadContent('@Url.Action("RegistrarCasa", "Propiedades")')">
+                                    Casas
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="@Url.Action("Departamento","Propietario")" style="color: white; text-shadow: 0 0 5px white;" onmouseover="this.style.textShadow='0 0 10px white';" onmouseout="this.style.textShadow='0 0 5px white';">
+                                    Departamentos
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="@Url.Action("About","Home")" style="color: white; text-shadow: 0 0 5px white;" onmouseover="this.style.textShadow='0 0 10px white';" onmouseout="this.style.textShadow='0 0 5px white';">
+                            <font style="vertical-align: inherit;">
+                                <font style="vertical-align: inherit;">Acerca de Nosotros</font>
+                            </font>
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex justify-content-end align-items-center">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle me-4" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle me-2"></i> <!-- Icono de usuario registrado -->
+                                @if (Session["NombreReal"] != null)
+                                {
+                                    @Session["NombreReal"] <!-- Mostramos el nombre del usuario desde la sesión -->
+                                }
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="@Url.Action("CerrarSesion", "Acceso")">Cerrar sesión</a></li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle me-4" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user me-2"></i> <!-- Icono de usuario no registrado -->
+                                Usuario
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="@Url.Action("Index", "Acceso")">Iniciar sesión</a></li>
+                                <li><a class="dropdown-item" href="@Url.Action("Register", "Acceso")">Registrarse</a></li>
+                            </ul>
+                        </div>
+                    }
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </nav>
+
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerModalLabel">Registro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <!-- Contenido del formulario de registro -->
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Registrarse</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Content -->
+    <div id="contend">
+        @RenderBody()
+    </div>
+
+    <script>
+        function loadContent(page) {
+            $("#content").load(page, function() {
+                $("#content").removeClass("d-none"); // Muestra el contenido después de cargarlo
+                            initMap();
+                        });
+                    }
+
+        $(".dropdown-toggle").click(function() {
+            $(this).next(".dropdown-menu").toggle();
+                    });
+
+        $(".dropdown-item").click(function() {
+            $(this).closest(".dropdown-menu").hide(); // Oculta el menú desplegable
+                    });
+
+        // Redireccionar al index al hacer clic en el logo de la cabecera
+        $(".navbar-brand").click(function() {
+                        window.location.href = "@Url.Action("Index", "Home")";
+                    });
+    </script>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Styles.Render("~/Content/css")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,260 @@
+﻿<div class="container py-4">
+    <h1 class="mb-4">Formulario de Reservas</h1>
+    <form id="reservaForm">
+        <div class="mb-3 row">
+            <label for="codigo_usuario" class="col-sm-2 col-form-label">Código Usuario:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="codigo_usuario" name="codigo_usuario">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="codigo_propiedad" class="col-sm-2 col-form-label">Código Propiedad:</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="codigo_propiedad" name="codigo_propiedad">
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <label for="horario" class="col-sm-2 col-form-label">Horario:</label>
+            <div class="col-sm-10">
+                <select class="form-select" id="horario" name="horario">
+                    <option value="08:00">08:00</option>
+                    <option value="09:00">09:00</option>
+                    <option value="10:00">10:00</option>
+                    <option value="11:00">11:00</option>
+                    <option value="12:00">12:00</option>
+                    <option value="13:00">13:00</option>
+                    <option value="14:00">14:00</option>
+                    <option value="15:00">15:00</option>
+                    <option value="16:00">16:00</option>
+                    <option value="17:00">17:00</option>
+                    <option value="18:00">18:00</option>
+                    <option value="19:00">19:00</option>
+                    <option value="20:00">20:00</option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3 row">
+            <div class="col-sm-10 offset-sm-2">
+                <button type="button" class="btn btn-primary" onclick="agendarVisita()">Agendar Visita</button>
+            </div>
+        </div>
+    </form>
+
+    <h2 class="mb-4">Reservas</h2>
+    <table id="reservas" class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID Usuario</th>
+                <th>ID Propiedad</th>
+                <th>Hora</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se cargarán las reservas desde el servidor -->
+        </tbody>
+    </table>
+
+    <h2 class="mb-4">Confirmados</h2>
+    <table id="confirmadas" class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>ID Usuario</th>
+                <th>ID Propiedad</th>
+                <th>Hora</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aquí se agregarán las reservas confirmadas -->
+        </tbody>
+    </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    // Función para agendar una visita
+    function agendarVisita() {
+        const reserva = {
+            Cod_usuario: document.getElementById('codigo_usuario').value,
+            Cod_propiedad: document.getElementById('codigo_propiedad').value,
+            Hora: document.getElementById('horario').value,
+            Estado: 'Reservado'
+        };
+
+        $.ajax({
+            url: '/Agente/Guardar',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(reserva),
+            success: function (response) {
+                if (response.resultado) {
+                    alert('Reserva creada exitosamente');
+                    cargarReservas();
+                } else {
+                    alert('Error al crear la reserva: ' + response.mensaje);
+                }
+            }
+        });
+    }
+
+    // Función para cargar las reservas pendientes
+    function cargarReservas() {
+        $.ajax({
+            url: '/Agente/ListarPendientes',
+            type: 'GET',
+            success: function (response) {
+                const reservasTable = $('#reservas tbody');
+                reservasTable.empty();
+
+                response.data.forEach(function (reserva) {
+                    reservasTable.append(`
+                    <tr data-id="${reserva.Cod}">
+                        <td>${reserva.Cod_usuario}</td>
+                        <td>${reserva.Cod_propiedad}</td>
+                        <td>${reserva.Hora}</td>
+                        <td>${reserva.Estado}</td>
+                        <td>
+                            <button class="btn btn-success" onclick="confirmarVisita(${reserva.Cod})">Confirmar</button>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminarVisita(${reserva.Cod})">Eliminar</button>
+                            <button type="button" class="btn btn-info btn-sm">Contactar</button>
+                        </td>
+                    </tr>
+                `);
+                });
+            }
+        });
+    }
+
+    // Función para cargar las visitas confirmadas
+    function cargarVisitas() {
+        $.ajax({
+            url: '/Agente/ListarConfirmados',
+            type: 'GET',
+            success: function (response) {
+                const visitasTable = $('#confirmadas tbody');
+                visitasTable.empty();
+
+                response.data.forEach(function (visita) {
+                    visitasTable.append(`
+                    <tr data-id="${visita.Cod}">
+                        <td>${visita.Cod_usuario}</td>
+                        <td>${visita.Cod_propiedad}</td>
+                        <td>${visita.Hora}</td>
+                        <td>${visita.Estado}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-sm" onclick="eliminarVisita(${visita.Cod})">Eliminar</button>
+                            <button type="button" class="btn btn-info btn-sm">Contactar</button>
+                            <button type="button" class="btn btn-info btn-sm" onclick="alquilarVisita(${visita.Cod})">Alquilar</button>
+                        </td>
+                    </tr>
+                `);
+                });
+            }
+        });
+    }
+
+    // Función para confirmar una visita
+    function confirmarVisita(cod) {
+        $.ajax({
+            url: '/Agente/ConfirmarVisita',
+            type: 'POST',
+            data: JSON.stringify({ cod: cod }),
+            contentType: 'application/json',
+            success: function (response) {
+                if (response.resultado) {
+                    alert("Visita confirmada exitosamente.");
+                    cargarReservas(); // Recargar la lista de reservas después de confirmar
+                    cargarVisitas(); // Recargar la lista de visitas confirmadas después de confirmar
+                } else {
+                    alert("Error al confirmar la visita: " + response.mensaje);
+                }
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    // Función para eliminar una visita
+    function eliminarVisita(cod) {
+        if (confirm("¿Está seguro de que desea eliminar esta visita?")) {
+            $.ajax({
+                url: '/Agente/Eliminar',
+                type: 'POST',
+                data: JSON.stringify({ cod: cod }),
+                contentType: 'application/json',
+                success: function (response) {
+                    if (response.resultado) {
+                        alert("Visita eliminada exitosamente.");
+                        cargarReservas(); // Recargar la lista de reservas después de eliminar
+                        cargarVisitas(); // Recargar la lista de visitas después de eliminar
+                    } else {
+                        alert("Error al eliminar la visita: " + response.mensaje);
+                    }
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+
+    // Función para alquilar una propiedad confirmada
+    function alquilarVisita(cod) {
+        $.ajax({
+            url: '/Agente/Alquilar',
+            type: 'POST',
+            data: JSON.stringify({ cod: cod }),
+            contentType: 'application/json',
+            success: function (response) {
+                if (response.resultado) {
+                    alert("Propiedad alquilada exitosamente.");
+                    cargarVisitas(); // Recargar la lista de visitas después de alquilar
+                    cargarAlquilados(); // Recargar la lista de alquilados
+                } else {
+                    alert("Error al alquilar la propiedad: " + response.mensaje);
+                }
+            },
+            error: function (error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    // Función para cargar las propiedades alquiladas
+    function cargarAlquilados() {
+        $.ajax({
+            url: '/Agente/ListarAlquilados',
+            type: 'GET',
+            success: function (response) {
+                const alquiladosTable = $('#alquilados tbody');
+                alquiladosTable.empty();
+
+                response.data.forEach(function (alquilado) {
+                    alquiladosTable.append(`
+                    <tr data-id="${alquilado.Cod}">
+                        <td>${alquilado.Cod_usuario}</td>
+                        <td>${alquilado.Cod_propiedad}</td>
+                        <td>${alquilado.Fecha}</td>
+                        <td>${alquilado.Comision}</td>
+                        <td>
+                            <button type="button" class="btn btn-info btn-sm">Contactar</button>
+                        </td>
+                    </tr>
+                `);
+                });
+            }
+        });
+    }
+
+    // Cargar las listas al cargar la página
+    $(document).ready(function () {
+        cargarReservas();
+        cargarVisitas();
+        cargarAlquilados();
+    });
+</script>

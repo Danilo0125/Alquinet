@@ -1,0 +1,83 @@
+﻿@model List<Alquinet_Entidad.Propiedad>
+<div class="container mt-5">
+    <div class="row row-cols-1 row-cols-md-2 g-4" id="property-list">
+        @foreach (var property in Model)
+        {
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="row g-0">
+                        <div class="col-md-4 d-flex flex-column">
+                            <div id="carouselExampleControls@(property.Cod)" class="carousel slide mb-2" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @for (int i = 0; i < property.Fotos.Count; i++)
+                                    {
+                                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                                            <img src="data:image/jpeg;base64,@property.Fotos[i].Base64" class="d-block w-100 img-fluid" style="height: 150px; object-fit: cover; margin-top: 10px; margin-left: 10px;" alt="Imagen de la propiedad">
+                                        </div>
+                                    }
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls@(property.Cod)" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls@(property.Cod)" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
+                            <div style="margin-left: 50px;">
+                                <span class="h5 mb-0">@property.Precio BOB</span><br>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body d-flex flex-column justify-content-between">
+                                <div class="property-info">
+                                    <h5 class="card-title">@property.Titulo</h5>
+                                    <p class="card-text">
+                                        @property.Direccion.Calle | @property.Direccion.Barrio<br>
+                                        <small>@property.Area m² @property.Tipo</small><br>
+                                    </p>
+                                </div>
+                                <div class="property-description">
+                                    <p class="card-text overflow-hidden" style="max-height: 150px;">
+                                        @(property.Descripcion.Length > 50 ? property.Descripcion.Substring(0, 50) + "..." : property.Descripcion.Split(';')[property.Descripcion.Split(';').Length - 1])
+                                    </p>
+                                    <a href="@Url.Action("Mostrar", new { cod_propiedad = property.Cod })" class="btn btn-secondary">Contactar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    const additionalFields = document.getElementById('additionalFields');
+
+    let visible = false;
+
+    function toggleAdditionalFields() {
+        if (visible) {
+            additionalFields.style.display = 'none';
+        } else {
+            additionalFields.style.display = 'flex';
+        }
+        visible = !visible;
+    }
+</script>
+<script>
+    const additionalFieldsFilter = document.getElementById('additionalFieldsFilter');
+
+    let filterVisible = false;
+
+    function toggleAdditionalFieldsFilter() {
+        if (filterVisible) {
+            additionalFieldsFilter.style.display = 'none';
+        } else {
+            additionalFieldsFilter.style.display = 'flex';
+        }
+        filterVisible = !filterVisible;
+    }
+</script>

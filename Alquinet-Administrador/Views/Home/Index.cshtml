@@ -1,0 +1,106 @@
+﻿@*model List<Alquinet_Entidad.Usuario>
+    @{
+        ViewBag.Title = "Login";
+    }
+
+    <h2>Cargar Usuario</h2>
+    <div class="center">
+        <table class="table">
+            <thead>
+                <tr>
+                    <td>Cod</td>
+                    <td>Nombre</td>
+                    <td>Apellido</td>
+                    <td>Telefono</td>
+                    <td>Correo</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var usuario in Model)
+                {
+                    <tr>
+                        <td>@usuario.Cod</td>
+                        <td>@usuario.Nombre</td>
+                        <td>@usuario.Apellido</td>
+                        <td>@usuario.Telefono</td>
+                        <td>@usuario.Correo</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>*@
+
+
+@{
+    ViewBag.Title = "Registrar Propiedad";
+}
+<h2>Registrar Propiedad</h2>
+
+<form id="formRegistrar" enctype="multipart/form-data">
+     Campos de Dirección 
+<input type="text" id="cod_postal" name="cod_postal" placeholder="Código Postal" required />
+<input type="text" id="calle" name="calle" placeholder="Calle" required />
+<input type="text" id="barrio" name="barrio" placeholder="Barrio" required />
+<input type="text" id="zona" name="zona" placeholder="Zona" required />
+<input type="text" id="longitud" name="longitud" placeholder="Longitud" required />
+<input type="text" id="latitud" name="latitud" placeholder="Latitud" required />
+ Campos de Propiedad 
+<input type="text" id="titulo" name="titulo" placeholder="Título" required />
+<input type="text" id="area" name="area" placeholder="Área" required />
+<input type="text" id="tipo" name="tipo" placeholder="Tipo" required />
+<input type="text" id="descripcion" name="descripcion" placeholder="Descripción" required />
+<input type="text" id="disponibilidad" name="disponibilidad" placeholder="Disponibilidad" required />
+<input type="text" id="precioTexto" name="precioTexto" placeholder="Precio" required />
+<input type="hidden" id="cod_usuario" name="cod_usuario" value="22" />
+ Campo de imágenes 
+<input type="file" id="imagenes" name="archivosImagen" multiple />
+
+    <button type="button" id="btnGuardar">Guardar</button>
+</form>
+
+@section Scripts {
+@*<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>*@
+<script>
+        $(document).ready(function() {
+            $('#btnGuardar').click(function() {
+                var formData = new FormData($('#formRegistrar')[0]);
+                var direccion = {
+                    Cod_pos: $('#cod_postal').val(),
+                    Calle: $('#calle').val(),
+                    Barrio: $('#barrio').val(),
+                    Zona: $('#zona').val(),
+                    Longitud: $('#longitud').val(),
+                    Latitud: $('#latitud').val()
+                };
+                var propiedad = {
+                    Titulo: $('#titulo').val(),
+                    Area: $('#area').val(),
+                    Tipo: $('#tipo').val(),
+                    Descripcion: $('#descripcion').val(),
+                    Disponibilidad: $('#disponibilidad').val(),
+                    PrecioTexto: $('#precioTexto').val(),
+                    Cod_usuario: $('#cod_usuario').val()
+                };
+                formData.append('objDireccion', JSON.stringify(direccion));
+                formData.append('objPropiedad', JSON.stringify(propiedad));
+                $.ajax({
+                    url: '@Url.Action("Guardar", "Propiedad")',
+                    type: 'POST',
+                    contentType: false,
+                    data: formData,
+                    processData: false,
+                    success: function(response) {
+                        if (response.operacion_exitosa) {
+                            alert('Propiedad guardada exitosamente. ID: ' + response.id_generado);
+                        } else {
+                            alert('Error: ' + response.mensaje);
+                        }
+                    },
+                    error: function(err) {
+                        alert('Error en la solicitud.');
+                    }
+                });
+            });
+        });
+</script>
+}

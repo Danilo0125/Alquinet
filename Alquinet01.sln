@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34902.65
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alquinet-Administrador", "Alquinet-Administrador\Alquinet-Administrador.csproj", "{1B75C388-65B1-4B4E-84E2-B9430C9C335D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alquinet-Cliente", "Alquinet-Cliente\Alquinet-Cliente.csproj", "{DEC3E8B5-EA3E-44E3-828E-C964123C007E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alquinet-Datos", "Alquinet-Datos\Alquinet-Datos.csproj", "{5C3BD021-708E-487A-B7C8-E62AFCC0D769}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alquinet-Entidad", "Alquinet-Entidad\Alquinet-Entidad.csproj", "{85072C11-FE34-473F-8294-825BAB815F4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alquinet-Service", "Alquinet-Negocio\Alquinet-Service.csproj", "{BAC590D4-0549-45BD-AA12-3E02B138B49C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alquinet_Test_DataBase", "Alquinet_Test_DataBase\Alquinet_Test_DataBase.csproj", "{10558C20-7107-4FE2-AE4B-034A8BA3BC49}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1B75C388-65B1-4B4E-84E2-B9430C9C335D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B75C388-65B1-4B4E-84E2-B9430C9C335D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B75C388-65B1-4B4E-84E2-B9430C9C335D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B75C388-65B1-4B4E-84E2-B9430C9C335D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEC3E8B5-EA3E-44E3-828E-C964123C007E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEC3E8B5-EA3E-44E3-828E-C964123C007E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEC3E8B5-EA3E-44E3-828E-C964123C007E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEC3E8B5-EA3E-44E3-828E-C964123C007E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C3BD021-708E-487A-B7C8-E62AFCC0D769}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C3BD021-708E-487A-B7C8-E62AFCC0D769}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C3BD021-708E-487A-B7C8-E62AFCC0D769}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C3BD021-708E-487A-B7C8-E62AFCC0D769}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85072C11-FE34-473F-8294-825BAB815F4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85072C11-FE34-473F-8294-825BAB815F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85072C11-FE34-473F-8294-825BAB815F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85072C11-FE34-473F-8294-825BAB815F4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAC590D4-0549-45BD-AA12-3E02B138B49C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAC590D4-0549-45BD-AA12-3E02B138B49C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAC590D4-0549-45BD-AA12-3E02B138B49C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAC590D4-0549-45BD-AA12-3E02B138B49C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10558C20-7107-4FE2-AE4B-034A8BA3BC49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10558C20-7107-4FE2-AE4B-034A8BA3BC49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10558C20-7107-4FE2-AE4B-034A8BA3BC49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10558C20-7107-4FE2-AE4B-034A8BA3BC49}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9EF12E79-C6E6-4376-A1E3-D8C2FAB6B418}
+	EndGlobalSection
+EndGlobal

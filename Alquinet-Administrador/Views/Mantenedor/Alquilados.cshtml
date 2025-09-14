@@ -1,0 +1,250 @@
+﻿@{
+    ViewBag.Title = "Alquilados";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<ol class="breadcrumb mb-4">
+    <li class="breadcrumb-item"><a href="@Url.Action("Index","Home")">Resumen</a></li>
+    <li class="breadcrumb-item active">Propiedades Alquiladas</li>
+</ol>
+<div class="card">
+
+    <div class="card-header">
+        <i class="fas fa-building me-1"></i>
+        Propiedades Alquiladas
+    </div>
+    <div class="card-body">
+        <div class="row m-2">
+            <div class="col-sm-12">
+                <button type="button" id="BtnCrear" class="btn btn-success">Crear Nuevo</button>
+            </div>
+        </div>
+        <hr />
+        <table id="tabla" class="table table-bordered" style="width: 100%">
+            <caption>
+                <i class="fas fa-users me-1"></i>
+                Propiedades
+            </caption>
+            <thead class="table-dark">
+                <tr>
+                    <th>Cod</th>
+                    <th>Cod Usuario</th>
+                    <th>Cod Agente</th>
+                    <th>Cod Propiedad</th>
+                    <th>Fecha</th>
+                    <th>Comision</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-black text-white">
+                <h5 class="modal-title" id="LblTipoCrud">Alquilado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row m-2">
+                    <input type="hidden" id="TxtCod" />
+                    <div class="col-sm-6">
+                        <label class="form-label">Cod Usuario</label>
+                        <input type="text" class="form-control" id="TxtCodUser" autocomplete="off" />
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label">Cod Agente</label>
+                        <input type="text" class="form-control" id="TxtCodAgente" autocomplete="off" />
+                    </div>
+                    <div class="col-sm-12">
+                        <label class="form-label">Cod Propiedad</label>
+                        <input type="text" class="form-control" id="TxtCodPropiedad" autocomplete="off" />
+                    </div>
+                    <div class="col-sm-7">
+                        <label class="form-label">Fecha</label>
+                        <input type="date" class="form-control" id="TxtFecha" autocomplete="off" />
+                    </div>
+                    <div class="col-sm-5">
+                        <label class="form-label">Comisión</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="TxtComision" placeholder="Comisión" autocomplete="off" />
+                            <span class="input-group-text">Bs</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row m-2">
+                    <div class="col-12">
+                        <div id="mensajeError" class="alert alert-danger" role="alert" style="display:none;">
+                            A simple danger alert—check it out!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="BtnGuardar">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var tablita = $("#tabla").DataTable({
+                responsive: true,
+                ordering: false,
+                "ajax": {
+                    url: '@Url.Action("Listar", "Alquilado")',
+                    type: "GET",
+                    dataType: "json",
+                    dataSrc: "data"
+                },
+                "columns": [
+                    { "data": "Cod" },
+                    { "data": "Cod_usuario" },
+                    { "data": "Cod_agente" },
+                    { "data": "Cod_propiedad" },
+                    { "data": "FechaText" },
+                    { "data": "ComisionText" },
+                    {
+                        "defaultContent": '<button type="button" class="btn btn-primary btn-sm btn-editar" data-bs-toggle="tooltip" data-bs-placement="top" title="Editar"><i class="fas fa-pen"></i></button>' +
+                            '<button type="button" class="btn btn-danger btn-sm ms-2 btn-eliminar" data-bs-toggle="tooltip" data-bs-placement="top" title="Eliminar"><i class="fas fa-trash"></i></button>',
+                        "orderable": false,
+                        "searchable": false,
+                        "width": "90px"
+                    }
+                ],
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.24/i18n/Spanish.json"
+                }
+            });
+
+            function abrirModal(json) {
+                if (json == null) {
+                    $("#LblTipoCrud").html("Crear <strong>Alquilado</strong>");
+                    $("#TxtCod").val(0).attr("type", "hidden");
+                    $("#TxtCodUser").val("").attr("type", "text").prop("disabled", false);
+                    $("#TxtCodAgente").val("").attr("type", "text");
+                    $("#TxtCodPropiedad").val("").attr("type", "text").prop("disabled", false);
+                    $("#TxtFecha").val("").attr("type", "date");
+                    $("#TxtComision").val("").attr("type", "text");
+                    $("#mensajeError").hide();
+                } else {
+                    $("#LblTipoCrud").html("Editar <strong>Alquilado</strong>");
+                    $("#TxtCod").val(json.Cod).attr("type", "text").prop("disabled", true);
+                    $("#TxtCodUser").val(json.Cod_usuario).attr("type", "text").prop("disabled", true);
+                    $("#TxtCodAgente").val(json.Cod_agente).attr("type", "text");
+                    $("#TxtCodPropiedad").val(json.Cod_propiedad).attr("type", "text").prop("disabled", true);
+                    $("#TxtFecha").val(json.Fecha).attr("type", "date");
+                    $("#TxtComision").val(json.Comision).attr("type", "text");
+                }
+                $("#staticBackdrop").modal("show");
+            }
+
+
+            $("#tabla tbody").on("click", '.btn-editar', function () {
+                var filaSelecionada = $(this).closest("tr");
+                var data = tablita.row(filaSelecionada).data();
+                abrirModal(data);
+            });
+            $("#BtnCrear").on("click", function () {
+                abrirModal(null);
+            });
+            $("#BtnGuardar").on("click", function () {
+                let errorMessage = null
+                debugger;
+                // Validaciones de campos vacíos
+                if ($("#TxtCodUser").val().trim() === "") errorMessage = "Cod Usuario es obligatorio.";
+                else if ($("#TxtCodAgente").val().trim() === "") errorMessage = "Cod Agente es obligatorio.";
+                else if ($("#TxtCodPropiedad").val().trim() === "") errorMessage = "Cod Propiedad es obligatorio.";
+                else if ($("#TxtFecha").val().trim() === "") errorMessage = "Fecha es obligatorio.";
+                else if ($("#TxtComision").val().trim() === "") errorMessage = "Comisión es obligatorio.";
+
+                if (errorMessage != null) {
+                    $("#mensajeError").text(errorMessage);
+                    $("#mensajeError").show();
+                } else {
+                    var Alquilado = {
+                        Cod: $("#TxtCod").val(),
+                        Cod_usuario: $("#TxtCodUser").val(),
+                        Cod_agente: $("#TxtCodAgente").val(),
+                        Cod_propiedad: $("#TxtCodPropiedad").val(),
+                        FechaText: $("#TxtFecha").val(),
+                        ComisionText: $("#TxtComision").val()
+                    }
+                    $.ajax({
+                        url: '@Url.Action("Guardar", "Alquilado")',
+                        type: "POST",
+                        data: JSON.stringify({ Alquilado: Alquilado }),
+                        dataType: "json",
+                        contentType: "application/json; charset-utf-8",
+                        success: function (data) {
+                            if (Alquilado.Cod == 0) {
+                                if (data.resultado > 0) {
+                                    Alquilado.Cod = data.resultado;
+                                    tablita.row.add(Alquilado).draw(false);
+                                    $("#staticBackdrop").modal("hide");
+                                } else {
+                                    $("#mensajeError").text(data.mensaje);
+                                    $("#mensajeError").show();
+                                }
+                            } else {
+                                if (data.resultado) {
+                                    tablita.row(filaSelecionada).data(Alquilado).draw(false);
+                                    filaSelecionada = null;
+                                    $("#staticBackdrop").modal("hide");
+                                } else {
+                                    $("#mensajeError").text(data.mensaje);
+                                    $("#mensajeError").show();
+                                }
+                            }
+                        },
+                        error: function (error) {
+                            $("#mensajeError").text("Error al guardar la información");
+                            $("#mensajeError").show();
+                        }
+                    });
+                }
+            });
+
+            $("#tabla tbody").on("click", '.btn-eliminar', function () {
+                var filaSelecionada = $(this).closest("tr");
+                var data = tablita.row(filaSelecionada).data();
+                swal({
+                    title: "¿Está seguro?",
+                    text: "¿Desea eliminar el registro alquilado?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-primary",
+                    confirmButtonText: "Sí",
+                    cancelButtonText: "No",
+                    closeOnConfirm: true
+                },
+                function () {
+                    $.ajax({
+                        url: '@Url.Action("Eliminar", "Alquilado")',
+                        type: "POST",
+                        data: JSON.stringify({ cod: data.Cod}),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (response) {
+                            if (response.resultado) {
+                                tablita.row(filaSelecionada).remove().draw();
+                            } else {
+                                swal("No se pudo eliminar", response.mensaje, "error");
+                            }
+                        },
+                        error: function (error) {
+                            swal("Error", "No se pudo eliminar el registro", "error");
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+}
